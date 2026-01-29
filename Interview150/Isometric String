@@ -1,0 +1,18 @@
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        return encode(s).equals(encode(t));
+    }
+
+    private String encode(String str) {
+        HashMap<Character, Integer> map = new HashMap<>();
+        StringBuilder sb = new StringBuilder();
+        int id = 0;
+
+        for (char c : str.toCharArray()) {
+            if (!map.containsKey(c))
+                map.put(c, id++);
+            sb.append(map.get(c));
+        }
+        return sb.toString();
+    }
+}
