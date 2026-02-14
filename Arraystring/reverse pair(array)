@@ -1,0 +1,102 @@
+// class Solution {
+//     static int count;
+
+//     public int reversePairs(int[] nums)
+//      {
+//          count = 0;
+//          mergeSort(nums);
+//          return count;
+//     }
+
+//     private static void mergeSort(int[] arr)
+//      {
+//         int n = arr.length;
+//         if (n <= 1) return;// 1 length array is phle se sorted 
+//              // step 1: create 2 new empty  arrays of the size n/2 each
+
+//         int[] a = new int[n / 2];
+//         int[] b = new int[n - n / 2];
+
+//           // step 2: copy paste arr into a and b
+
+//         int idx = 0; // idx travel karega arr pe
+//         for (int i = 0; i < a.length; i++) a[i] = arr[idx++];
+//         for (int i = 0; i < b.length; i++) b[i] = arr[idx++];
+//           // step3: magic 
+
+//         mergeSort(a);
+//         mergeSort(b);
+//               // step4: merge a and b into arr
+
+//         merge(a, b, arr);
+//     }
+
+//     public static void merge(int[] a, int[] b, int[] c)
+//      {
+//         int i = 0, j = 0, k = 0;
+
+//         while (i < a.length && j < b.length) {
+//             if (a[i] <= b[j]) {
+//                 c[k++] = a[i++];
+//             } else {
+//                 if ((long) a[i] > 2L * b[j]) {
+//                     count += (a.length - i);
+//                 }
+//                 c[k++] = b[j++];
+//             }
+//      }
+
+//         while (i < a.length) c[k++] = a[i++];
+//         while (j < b.length) c[k++] = b[j++];
+//     }
+// }
+         class Solution {
+    static int count;
+
+    public int reversePairs(int[] nums) {
+        count = 0;
+        mergeSort(nums, 0, nums.length - 1);
+        return count;
+    }
+
+    private static void mergeSort(int[] arr, int left, int right) {
+        if (left >= right) return;
+
+        int mid = left + (right - left) / 2;
+
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+
+        countPairs(arr, left, mid, right);
+        merge(arr, left, mid, right);
+    }
+
+    // Correct place to count reverse pairs
+    private static void countPairs(int[] arr, int left, int mid, int right) {
+        int j = mid + 1;
+
+        for (int i = left; i <= mid; i++) {
+            while (j <= right && (long) arr[i] > 2L * arr[j]) {
+                j++;
+            }
+            count += (j - (mid + 1));
+        }
+    }
+
+    private static void merge(int[] arr, int left, int mid, int right) {
+        int[] temp = new int[right - left + 1];
+        int i = left, j = mid + 1, k = 0;
+
+        while (i <= mid && j <= right) {
+            if (arr[i] <= arr[j]) temp[k++] = arr[i++];
+            else temp[k++] = arr[j++];
+        }
+
+        while (i <= mid) temp[k++] = arr[i++];
+        while (j <= right) temp[k++] = arr[j++];
+
+        for (int x = 0; x < temp.length; x++) {
+            arr[left + x] = temp[x];
+        }
+    }
+}
